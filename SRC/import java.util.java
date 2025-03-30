@@ -1,4 +1,4 @@
-import java.util.Scanner; 
+import java.util.Scanner;
  
 class SchedulingAlgorithms { 
     public static void roundRobin(int n, int bt[], int quantum) { 
