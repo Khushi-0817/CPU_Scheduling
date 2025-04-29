@@ -1,166 +1,342 @@
-import java.util.Scanner;
- 
-class SchedulingAlgorithms { 
-    public static void roundRobin(int n, int bt[], int quantum) { 
-        int wt[] = new int[n]; 
-        int tat[] = new int[n]; 
-        int rem_bt[] = new int[n]; 
- 
-        for (int i = 0; i < n; i++) { 
-            rem_bt[i] = bt[i]; 
-        } 
- 
-        int t = 0;  
- 
-        while (true) { 
-            boolean done = true; 
- 
-            for (int i = 0; i < n; i++) { 
-                if (rem_bt[i] > 0) { 
-                    done = false; 
- 
-                    if (rem_bt[i] > quantum) { 
-                        t += quantum; 
-                        rem_bt[i] -= quantum; 
-                    } else { 
-                        t += rem_bt[i]; 
-                        wt[i] = t - bt[i]; 
-                        rem_bt[i] = 0; 
-                    } 
-                } 
-            } 
- 
-            if (done) { 
-                break; 
-            } 
-        } 
- 
-        for (int i = 0; i < n; i++) { 
-            tat[i] = bt[i] + wt[i]; 
-        } 
- 
-        displayResults(n, bt, wt, tat); 
-    } 
- 
-    public static void firstComeFirstServe(int n, int bt[]) { 
-        int wt[] = new int[n]; 
-        int tat[] = new int[n]; 
- 
-        wt[0] = 0;  
-        for (int i = 1; i < n; i++) { 
-            wt[i] = bt[i - 1] + wt[i - 1]; 
-        } 
- 
-        for (int i = 0; i < n; i++) { 
-            tat[i] = bt[i] + wt[i]; 
-        } 
- 
-        displayResults(n, bt, wt, tat); 
-    } 
- 
-    public static void shortestJobFirst(int n, int bt[]) { 
-        int wt[] = new int[n]; 
-        int tat[] = new int[n]; 
-        int pid[] = new int[n]; 
- 
-        for (int i = 0; i < n; i++) { 
-            pid[i] = i + 1; 
-        } 
- 
-        for (int i = 0; i < n - 1; i++) { 
-            for (int j = 0; j < n - i - 1; j++) { 
-                if (bt[j] > bt[j + 1]) { 
-                    int temp = bt[j]; 
-                    bt[j] = bt[j + 1]; 
-                    bt[j + 1] = temp; 
- 
-                    temp = pid[j]; 
-                    pid[j] = pid[j + 1]; 
-                    pid[j + 1] = temp; 
-                } 
-            } 
-        } 
- 
-        wt[0] = 0; 
- 
-        for (int i = 1; i < n; i++) { 
-            wt[i] = bt[i - 1] + wt[i - 1]; 
-        } 
- 
-        for (int i = 0; i < n; i++) { 
-            tat[i] = bt[i] + wt[i]; 
-        } 
- 
-        System.out.println("Process\tBurst Time\tWaiting Time\tTurnaround Time"); 
-        for (int i = 0; i < n; i++) { 
-            System.out.println(pid[i] + "\t" + bt[i] + "\t\t" + wt[i] + "\t\t" + tat[i]); 
-        } 
- 
-        int total_wt = 0, total_tat = 0; 
-        for (int i = 0; i < n; i++) { 
-            total_wt += wt[i]; 
-            total_tat += tat[i]; 
-        } 
- 
-        System.out.println("\nAverage waiting time: " + (float) total_wt / n); 
-        System.out.println("Average turnaround time: " + (float) total_tat / n); 
-    } 
- 
-    public static void displayResults(int n, int bt[], int wt[], int tat[]) { 
-        System.out.println("Process\tBurst Time\tWaiting Time\tTurnaround Time"); 
-        for (int i = 0; i < n; i++) { 
-            System.out.println((i + 1) + "\t" + bt[i] + "\t\t" + wt[i] + "\t\t" + tat[i]); 
-        } 
- 
-        int total_wt = 0, total_tat = 0; 
-        for (int i = 0; i < n; i++) { 
-            total_wt += wt[i]; 
-            total_tat += tat[i]; 
-        } 
- 
-        System.out.println("\nAverage waiting time: " + (float) total_wt / n); 
-        System.out.println("Average turnaround time: " + (float) total_tat / n); 
-    } 
-} 
- 
-public class Main { 
-    public static void main(String[] args) { 
-        Scanner sc = new Scanner(System.in); 
- 
-        System.out.println("Select a scheduling algorithm:"); 
-        System.out.println("1. Round Robin"); 
-        System.out.println("2. First Come First Serve (FCFS)"); 
-        System.out.println("3. Shortest Job First (SJF)"); 
-        System.out.print("Enter your choice (1/2/3): "); 
-        int choice = sc.nextInt(); 
- 
-        System.out.println("Enter the number of processes:"); 
-        int n = sc.nextInt(); 
- 
-        int burstTime[] = new int[n]; 
- 
-        System.out.println("Enter burst times for each process:"); 
-        for (int i = 0; i < n; i++) { 
-            burstTime[i] = sc.nextInt(); 
-        } 
- 
-        switch (choice) { 
-            case 1: 
-                System.out.println("Enter time quantum for Round Robin:"); 
-                int quantum = sc.nextInt(); 
-                SchedulingAlgorithms.roundRobin(n, burstTime, quantum); 
-                break; 
-            case 2: 
-                SchedulingAlgorithms.firstComeFirstServe(n, burstTime); 
-                break; 
-            case 3: 
-                SchedulingAlgorithms.shortestJobFirst(n, burstTime); 
-                break; 
-            default: 
-                System.out.println("Invalid choice!"); 
-                break; 
-        } 
- 
-        sc.close(); 
-    } 
-} 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CPU Scheduling Algorithms</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: radial-gradient(135deg, #71c06b 100%, #5CA9E9 100%);
+      min-height: 100vh;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 50px;
+      border-radius: 30px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      animation: slideUp 0.6s ease-out;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .input-group {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #2c3e50;
+    }
+
+    select,
+    input[type="number"] {
+      width: 100%;
+      padding: 12px 15px;
+      border: 2px solid #e0e6ed;
+      border-radius: 8px;
+      font-size: 14px;
+      background: #f8f9fa;
+    }
+
+    button {
+      background: linear-gradient(135deg, #5ce77c 0%, #4b3bae 100%);
+      color: white;
+      padding: 12px 30px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(28, 3, 221, 0.3);
+    }
+
+    .burst-time-input {
+      margin: 10px 0;
+    }
+
+    #quantumInput {
+      opacity: 0;
+      max-height: 0;
+      transition: all 0.4s ease;
+      overflow: hidden;
+    }
+
+    #quantumInput.show {
+      opacity: 1;
+      max-height: 100px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 30px;
+    }
+
+    th, td {
+      border: 1px solid #000810;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background: #5CA9E9;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>CPU Scheduling Algorithms</h1>
+
+    <div class="input-group">
+      <label for="algorithm">Select Algorithm:</label>
+      <select id="algorithm" onchange="toggleQuantum()">
+        <option value="1">Round Robin</option>
+        <option value="2">First Come First Serve</option>
+        <option value="3">Shortest Job First</option>
+      </select>
+    </div>
+
+    <div id="quantumInput" class="input-group">
+      <label for="quantum">Time Quantum:</label>
+      <input type="number" id="quantum" min="1" value="1">
+    </div>
+
+    <div class="input-group">
+      <label for="processCount">Number of Processes:</label>
+      <input type="number" id="processCount" min="1" value="1" onchange="generateBurstInputs()">
+    </div>
+
+    <div id="burstTimesContainer">
+      <label>Burst & Arrival Times:</label>
+    </div>
+
+    <button onclick="runAlgorithm()">Run Algorithm</button>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    function toggleQuantum() {
+      const algorithm = document.getElementById('algorithm').value;
+      document.getElementById('quantumInput').classList.toggle('show', algorithm === '1');
+    }
+
+    function generateBurstInputs() {
+      const count = parseInt(document.getElementById('processCount').value);
+      const container = document.getElementById('burstTimesContainer');
+      container.innerHTML = '<label>Burst & Arrival Times:</label>';
+
+      for (let i = 0; i < count; i++) {
+        const div = document.createElement('div');
+        div.className = 'burst-time-input';
+        div.innerHTML = `
+          <label>Process ${i + 1}:</label>
+          <input type="number" min="0" value="0" class="arrival" placeholder="Arrival Time">
+          <input type="number" min="1" value="1" class="bt" placeholder="Burst Time">
+        `;
+        container.appendChild(div);
+      }
+    }
+
+    function runAlgorithm() {
+  const algorithm = document.getElementById('algorithm').value;
+  const quantum = parseInt(document.getElementById('quantum').value);
+  const processes = collectProcesses();
+
+  let results;
+  switch (algorithm) {
+    case '1':
+      results = roundRobin(processes, quantum);
+      break;
+    case '2':
+      results = fcfs(processes);
+      break;
+    case '3':
+      results = sjf(processes);
+      break;
+  }
+
+  results.at = processes.map(p => p.at); // Add arrival times to results
+  displayResults(results);
+}
+
+
+    function collectProcesses() {
+      const arrivalInputs = document.getElementsByClassName('arrival');
+      const burstInputs = document.getElementsByClassName('bt');
+      const processes = [];
+
+      for (let i = 0; i < arrivalInputs.length; i++) {
+        processes.push({
+          id: i + 1,
+          at: parseInt(arrivalInputs[i].value),
+          bt: parseInt(burstInputs[i].value)
+        });
+      }
+
+      return processes;
+    }
+
+    function fcfs(processes) {
+      processes.sort((a, b) => a.at - b.at);
+      let time = 0;
+      const wt = [], tat = [], bt = [];
+
+      for (let i = 0; i < processes.length; i++) {
+        const p = processes[i];
+        if (time < p.at) time = p.at;
+        wt[i] = time - p.at;
+        time += p.bt;
+        tat[i] = wt[i] + p.bt;
+        bt[i] = p.bt;
+      }
+
+      return { pid: processes.map(p => p.id), bt, wt, tat };
+    }
+
+    function sjf(processes) {
+      let time = 0, completed = 0;
+      const n = processes.length;
+      const visited = Array(n).fill(false);
+      const wt = Array(n).fill(0), tat = Array(n).fill(0), bt = [], pid = [];
+
+      while (completed < n) {
+        let idx = -1, minBT = Infinity;
+
+        for (let i = 0; i < n; i++) {
+          if (!visited[i] && processes[i].at <= time && processes[i].bt < minBT) {
+            minBT = processes[i].bt;
+            idx = i;
+          }
+        }
+
+        if (idx === -1) {
+          time++;
+          continue;
+        }
+
+        const p = processes[idx];
+        visited[idx] = true;
+        bt.push(p.bt);
+        pid.push(p.id);
+        wt[completed] = time - p.at;
+        time += p.bt;
+        tat[completed] = wt[completed] + p.bt;
+        completed++;
+      }
+
+      return { pid, bt, wt, tat };
+    }
+
+    function roundRobin(processes, quantum) {
+      let time = 0;
+      const queue = [];
+      const n = processes.length;
+      const rem_bt = processes.map(p => p.bt);
+      const at = processes.map(p => p.at);
+      const wt = Array(n).fill(0), tat = Array(n).fill(0);
+      const arrived = new Set();
+
+      while (arrived.size < n || queue.length) {
+        for (let i = 0; i < n; i++) {
+          if (at[i] <= time && !arrived.has(i)) {
+            queue.push(i);
+            arrived.add(i);
+          }
+        }
+
+        if (queue.length === 0) {
+          time++;
+          continue;
+        }
+
+        const i = queue.shift();
+        if (rem_bt[i] > quantum) {
+          time += quantum;
+          rem_bt[i] -= quantum;
+        } else {
+          time += rem_bt[i];
+          wt[i] = time - processes[i].bt - at[i];
+          rem_bt[i] = 0;
+        }
+
+        for (let j = 0; j < n; j++) {
+          if (at[j] <= time && !arrived.has(j)) {
+            queue.push(j);
+            arrived.add(j);
+          }
+        }
+
+        if (rem_bt[i] > 0) queue.push(i);
+      }
+
+      for (let i = 0; i < n; i++) {
+        tat[i] = wt[i] + processes[i].bt;
+      }
+
+      return {
+        pid: processes.map(p => p.id),
+        bt: processes.map(p => p.bt),
+        wt,
+        tat
+      };
+    }
+
+    function displayResults(results) {
+  const container = document.getElementById('results');
+  let html = `<h3>Results</h3><table>
+    <tr>
+      <th>Process ID</th>
+      <th>Arrival Time</th>
+      <th>Burst Time</th>
+      <th>Waiting Time</th>
+      <th>Turnaround Time</th>
+    </tr>`;
+
+  for (let i = 0; i < results.bt.length; i++) {
+    html += `
+      <tr>
+        <td>${results.pid[i]}</td>
+        <td>${results.at[i]}</td>
+        <td>${results.bt[i]}</td>
+        <td>${results.wt[i]}</td>
+        <td>${results.tat[i]}</td>
+      </tr>
+    `;
+  }
+
+  const avgWT = (results.wt.reduce((a, b) => a + b, 0) / results.wt.length).toFixed(2);
+  const avgTAT = (results.tat.reduce((a, b) => a + b, 0) / results.tat.length).toFixed(2);
+
+  html += `</table><p>Average Waiting Time: ${avgWT}</p><p>Average Turnaround Time: ${avgTAT}</p>`;
+  container.innerHTML = html;
+}
+
+    // Initialize
+    generateBurstInputs();
+  </script>
+</body>
+</html>
